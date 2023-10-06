@@ -14,11 +14,11 @@
 "}" |
 "(" |
 ")"                 { return yytext[0]; }
-"E"                 { return E; }
-"NAO"               { return NAO; }
-"crencas"           { return CRENCAS; }
-"objetivos"         { return OBJETIVOS; }
-"planos"            { return PLANOS; }
+"E"                 { return AND; }
+"NAO"               { return NOT; }
+"crencas"           { return BELIEFS; }
+"objetivos"         { return GOALS; }
+"planos"            { return PLANS; }
 [a-z][a-zA-Z0-9]*   { return NAME; }
 [\n]                { }
 [\t]                { }
