@@ -5,17 +5,25 @@
 %}
 
 %union {
-
+    struct agent *a;
+    struct beliefs *b;
+    struct goals *g;
+    struct plans *p;
+    struct body *bo;
+    struct planContent *pc;
+    char *s;
 }
-
-// precisa arrumar isso aqui, fiz só a bnf
 
 %token  <s> NAME BELIEFS GOALS PLANS
 %token  <s> OR NOT AND
 
 %type <a> agent agents
 %type <s> triggerEvent context logExp
-%type <s> plansName beliefs beliefsName body plans, goalsName, goals
+%type <b> beliefs beliefsName
+%type <g> goals goalsName
+%type <p> plans plansName
+%type <pc> plansTuple
+%type <bo> body bodysFormula
 
 %%
 
