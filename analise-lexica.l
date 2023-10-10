@@ -19,7 +19,7 @@
 "crencas"           { return BELIEFS; }
 "objetivos"         { return GOALS; }
 "planos"            { return PLANS; }
-[a-z][a-zA-Z0-9]*   { return NAME; }
+[a-z][a-zA-Z0-9]*   { yylval.s = strdup(yytext); return NAME; }
 [\n]                { }
 [\t]                { }
 .                   { yyerror ("Caracter não reconhecido: %c\n", *yytext); }
