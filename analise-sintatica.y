@@ -21,42 +21,51 @@
 %type <s> triggerEvent context logExp
 %type <b> beliefs beliefsName
 %type <g> goals goalsName
-%type <p> plans plansName
+%type <p> plans plan
 %type <pc> plansTuple
 %type <bo> body bodysFormula
+
+%start agents
 
 %%
 
 agents:  { $$ = NULL; }
-    | agent '%' agents { $$  = newAgent($1, $2); }
+    | agent '%' agents { $$ = NULL; }
     ;
-agent: '#' NAME BELIEFS beliefs GOALS goals PLANS plans { $$ = newAgent($2, $4, $6, $8); }
+agent: '#' NAME BELIEFS beliefs GOALS goals PLANS plans { $$ = NULL; }
     ;
-beliefs: '{' beliefsName '}' { $$ = $2 }
+beliefs: '{' beliefsName '}'  { $$ = $2; }
     ;  
-beliefsName:{ $$ = NULL} 
-    | NAME ';' beliefsName { $$ = newBelief($1, $3); }
+beliefsName: { $$ = NULL; } 
+    | NAME ';' beliefsName { $$ = prependBelieve($3, $1); }
     ;
-goals: '{' goalsName '}' { $$ = $2 }
+goals: '{' goalsName '}'  { $$ = $2; }
     ;
-goalsName: { $$ = NULL} 
-    | NAME ';' goalsName { $$ = newGoal($1, $3); }
+goalsName: { $$ = NULL; } 
+    | NAME ';' goalsName { $$ = prependGoal($3, $1); }
     ;
-plans: '{' plansName '}' { $$ = $2 }
+plans: 
+    | { $$ = NULL; } 
+    | '{' plan ';' plans '}' { prependPlan($4, $2);}
     ;
-plansName: { $$ = NULL} 
-    | NAME ';' plansName { $$ = newPlan($1, $3); }
+plan:  { $$ = NULL; } 
+    | NAME plansTuple { createPlan($1, $2); }
     ;
-plansTuple:  '(' triggerEvent ';' context ';' body ')'
+plansTuple:  '(' triggerEvent ';' context ';' body ')' { $$ = createContent($2, $4, $6); }
     ;
-triggerEvent: NAME
+triggerEvent: NAME { $$ = $1; }
     ;
-context: { $$ = NULL } | logExp | NAME
+context: { $$ = NULL; } 
+    | logExp { $$ = $1; }
+    | NAME { $$ = $1; }
     ;
-logExp: NAME AND NAME | NAME OR NAME | NOT NAME
+logExp: NAME AND NAME { $$ = newExp($1, $3, $2); }
+    | NAME OR NAME { $$ =newExp($1, $3, $2); }
+    | NOT NAME { $$ = newExp(NULL, $3, $2); }
     ;
-body: '{' bodysFormula ';' '}'
+body: '{' bodysFormula '}' { $$ = $2; }
     ;
-bodysFormula: NAME
+bodysFormula:  { $$ = NULL; } |
+    NAME ';' bodysFormula { $$ = prependBody($3, $1); }
     ;
 %%

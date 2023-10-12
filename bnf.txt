@@ -1,0 +1,34 @@
+<agents> ::=  ε
+	 | <agent> '%' <agents>
+
+<agent> ::= '#' NAME BELIEFS <beliefs> GOALS <goals> PLANS <plans>
+
+<beliefs> ::= '{' <beliefsName> '}'
+
+<beliefsName> ::=  ε
+	      | NAME ';' <beliefsName>
+
+<goals> ::= '{' <goalsName> '}' 
+
+<goalsName> ::=  ε
+	    | NAME ';' <goalsName> 
+
+<plans> ::= '{' <plansName> '}' 
+
+<plansName> ::=  ε
+	    | NAME ';' <plansName> 
+
+<plansTuple> ::= '(' <tiggerEvent> ';' <context> ';' <body> ')'
+
+<tiggerEvent> ::= NAME
+
+<context> ::=  ε
+	  | <logExp>
+	  | NAME
+
+<logExp> ::= NAME AND NAME
+	 | NAME OR NAME
+	 | NOT NAME
+
+<body> ::= '{' <bodysFormula ';' '}'
+
