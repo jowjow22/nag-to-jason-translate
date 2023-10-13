@@ -1,5 +1,9 @@
 void yyerror(char *s, ...);
-extern yylineno;
+int yyparse(void);
+void yyrestart(FILE *f);
+int yylex(void);
+extern int yylineno;
+
 struct believes
 {
   char *believes;
@@ -31,13 +35,13 @@ struct plans
   struct plans *next;
 };
 
-struct agent
+struct agents
 {
   char *name;
   struct believes *believes;
   struct goals *goals;
   struct plans *plans;
-  struct agent *next;
+  struct agents *next;
 };
 
 // believes
@@ -54,5 +58,7 @@ struct plans *createPlan(char *name, struct planContent *planContent);
 struct plans *prependPlan(struct plans *plans, struct plans *newPlan);
 
 struct planContent *createContent(char *triggerEvent, char *context, struct body *body);
+struct agents *createAgent(char *name, struct believes *believes, struct goals *goals, struct plans *plans);
+struct agents *prependAgent(struct agents *agents, struct agents *newAgent);
 // exp
 char *newExp(char *leftSide, char *rightSide, char *operator);

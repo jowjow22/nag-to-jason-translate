@@ -13,6 +13,7 @@
 "}" |
 "(" |
 "%" |
+"#" |
 ")"                 { return yytext[0]; }
 "E"                 { return AND; }
 "OU"                { return OR; }
@@ -21,9 +22,9 @@
 "objetivos"         { return GOALS; }
 "planos"            { return PLANS; }
 [a-z][a-zA-Z0-9]*   { yylval.s = strdup(yytext); return NAME; }
+[ \t\r]+            { }
 [\n]                { }
 [\\\n]              { }
-[\t]                { }
 .                   { yyerror ("Caracter não reconhecido: %d\n", *yytext); }
 
 %%

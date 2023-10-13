@@ -5,8 +5,8 @@
 %}
 
 %union {
-    struct agent *a;
-    struct beliefs *b;
+    struct agents *a;
+    struct believes *b;
     struct goals *g;
     struct plans *p;
     struct body *bo;
@@ -30,9 +30,9 @@
 %%
 
 agents:  { $$ = NULL; }
-    | agent '%' agents { $$ = NULL; }
+    | agent '%' agents { $$ = prependAgent($3, $1); }
     ;
-agent: '#' NAME BELIEFS beliefs GOALS goals PLANS plans { $$ = NULL; }
+agent: '#' NAME BELIEFS ':' beliefs GOALS ':' goals PLANS ':' '{' plans '}' { $$ = createAgent($2, $5, $8, $12); }
     ;
 beliefs: '{' beliefsName '}'  { $$ = $2; }
     ;  
@@ -44,12 +44,11 @@ goals: '{' goalsName '}'  { $$ = $2; }
 goalsName: { $$ = NULL; } 
     | NAME ';' goalsName { $$ = prependGoal($3, $1); }
     ;
-plans: 
-    | { $$ = NULL; } 
-    | '{' plan ';' plans '}' { prependPlan($4, $2);}
+plans:  { $$ = NULL; } 
+    |  plan ';' plans  { $$ = prependPlan($3, $1);}
     ;
 plan:  { $$ = NULL; } 
-    | NAME plansTuple { createPlan($1, $2); }
+    | NAME plansTuple { $$ = createPlan($1, $2); }
     ;
 plansTuple:  '(' triggerEvent ';' context ';' body ')' { $$ = createContent($2, $4, $6); }
     ;
@@ -59,9 +58,9 @@ context: { $$ = NULL; }
     | logExp { $$ = $1; }
     | NAME { $$ = $1; }
     ;
-logExp: NAME AND NAME { $$ = newExp($1, $3, $2); }
-    | NAME OR NAME { $$ =newExp($1, $3, $2); }
-    | NOT NAME { $$ = newExp(NULL, $3, $2); }
+logExp: NAME AND NAME { $$ = newExp($1, $3, "E");}
+    | NAME OR NAME { $$ = newExp($1, $3, "OU"); }
+    | NOT NAME { $$ = newExp(NULL, $2, "NAO");  }
     ;
 body: '{' bodysFormula '}' { $$ = $2; }
     ;

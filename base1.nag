@@ -1,0 +1,5 @@
+#bob crencas: { estaChovendo ; }
+objetivos: { comprarGuardaChuva; }
+planos: { plano1 ( comprarGuardaChuva ; NAO estaChovendo ;
+{sair; procurarLoja; comprarGuardaChuva ; } ) ; }
+%
