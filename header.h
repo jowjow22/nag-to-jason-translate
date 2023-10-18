@@ -60,5 +60,8 @@ struct plans *prependPlan(struct plans *plans, struct plans *newPlan);
 struct planContent *createContent(char *triggerEvent, char *context, struct body *body);
 struct agents *createAgent(char *name, struct believes *believes, struct goals *goals, struct plans *plans);
 struct agents *prependAgent(struct agents *agents, struct agents *newAgent);
+void printAgent(struct agents *agents);
+void printList(struct agents *list);
+void printAgentInFile(struct agents *agent);
 // exp
 char *newExp(char *leftSide, char *rightSide, char *operator);

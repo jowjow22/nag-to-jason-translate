@@ -11,6 +11,7 @@
     struct plans *p;
     struct body *bo;
     struct planContent *pc;
+    void *v;
     char *s;
 }
 
@@ -24,15 +25,18 @@
 %type <p> plans plan
 %type <pc> plansTuple
 %type <bo> body bodysFormula
+%type <v> initial;
 
-%start agents
+%start initial
 
 %%
 
+initial: agents { printList($1); }
+    ;
 agents:  { $$ = NULL; }
     | agent '%' agents { $$ = prependAgent($3, $1); }
     ;
-agent: '#' NAME BELIEFS ':' beliefs GOALS ':' goals PLANS ':' '{' plans '}' { $$ = createAgent($2, $5, $8, $12); }
+agent: '#' NAME BELIEFS ':' beliefs GOALS ':' goals PLANS ':' '{' plans '}' { $$ = createAgent($2, $5, $8, $12);}
     ;
 beliefs: '{' beliefsName '}'  { $$ = $2; }
     ;  

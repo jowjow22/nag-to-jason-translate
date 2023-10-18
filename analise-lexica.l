@@ -25,6 +25,6 @@
 [ \t\r]+            { }
 [\n]                { }
 [\\\n]              { }
-.                   { yyerror ("Caracter não reconhecido: %d\n", *yytext); }
+.                   { }
 
 %%

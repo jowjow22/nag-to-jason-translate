@@ -35,6 +35,7 @@ struct goals *prependGoal(struct goals *goals, char *newGoal)
   char *formatedGoal = (char *)malloc(sizeof(char) * strlen(newGoal) + 3);
   strcat(formatedGoal, "!");
   strcat(formatedGoal, newGoal);
+  strcat(formatedGoal, ".");
 
   new->goals = formatedGoal;
   new->next = goals;
@@ -100,7 +101,7 @@ struct planContent *createContent(char *triggerEvent, char *context, struct body
     exit(0);
   }
 
-  new->triggerEvent = (char *)malloc(sizeof(char) * strlen(triggerEvent) + 2);
+  new->triggerEvent = (char *)malloc(sizeof(char) * strlen(triggerEvent) + 4);
   strcat(new->triggerEvent, "+!");
   strcat(new->triggerEvent, triggerEvent);
   strcat(new->triggerEvent, ":");
@@ -159,6 +160,108 @@ struct agents *createAgent(char *name, struct believes *believes, struct goals *
   return new;
 }
 
+void printAgent(struct agents *agents)
+{
+  struct agents *auxAgent = agents;
+  while (auxAgent != NULL)
+  {
+
+    struct believes *auxBelieves = auxAgent->believes;
+    while (auxBelieves != NULL)
+    {
+      printf("%s\n", auxBelieves->believes);
+      auxBelieves = auxBelieves->next;
+    }
+    printf("\n\n");
+
+    struct goals *auxGoals = auxAgent->goals;
+    while (auxGoals != NULL)
+    {
+      printf("%s\n", auxGoals->goals);
+      auxGoals = auxGoals->next;
+    }
+
+    printf("\n\n");
+
+    struct plans *auxPlans = auxAgent->plans;
+    while (auxPlans != NULL)
+    {
+
+      printf("%s", auxPlans->planContent->triggerEvent);
+      printf(" %s", auxPlans->planContent->context);
+
+      struct body *aux = auxPlans->planContent->body;
+
+      while (aux != NULL)
+      {
+        printf(" %s\n", aux->body);
+        aux = aux->next;
+      }
+
+      auxPlans = auxPlans->next;
+    }
+
+    auxAgent = auxAgent->next;
+  }
+}
+
+void printList(struct agents *list)
+{
+  struct agents *aux = list;
+  while (aux != NULL)
+  {
+    printAgentInFile(aux);
+    aux = aux->next;
+  }
+}
+
+void printAgentInFile(struct agents *agent)
+{
+  char *agentName = (char *)malloc(sizeof(char) * strlen(agent->name) + 5);
+  strcpy(agentName, agent->name);
+  strcat(agentName, ".asl");
+  FILE *f = fopen(agentName, "w");
+  struct believes *auxBelieves = agent->believes;
+  while (auxBelieves != NULL)
+  {
+    fprintf(f, "%s\n", auxBelieves->believes);
+    auxBelieves = auxBelieves->next;
+  }
+  fprintf(f, "\n\n");
+
+  struct goals *auxGoals = agent->goals;
+  while (auxGoals != NULL)
+  {
+    fprintf(f, "%s\n", auxGoals->goals);
+    auxGoals = auxGoals->next;
+  }
+
+  fprintf(f, "\n\n");
+
+  struct plans *auxPlans = agent->plans;
+  while (auxPlans != NULL)
+  {
+
+    fprintf(f, "%s", auxPlans->planContent->triggerEvent);
+    fprintf(f, " %s", auxPlans->planContent->context);
+
+    struct body *aux = auxPlans->planContent->body;
+
+    while (aux != NULL)
+    {
+      fprintf(f, " %s\n", aux->body);
+      aux = aux->next;
+    }
+
+    auxPlans = auxPlans->next;
+  }
+
+  fprintf(f, "\n");
+  free(agentName);
+  agentName = NULL;
+  fclose(f);
+}
+
 struct agents *prependAgent(struct agents *agents, struct agents *newAgent)
 {
   if (newAgent == NULL)
@@ -166,48 +269,11 @@ struct agents *prependAgent(struct agents *agents, struct agents *newAgent)
     return agents;
   }
 
-  // print agent
-  printf("%s\n\n", newAgent->name);
-  struct believes *auxBelieves = newAgent->believes;
-  while (auxBelieves != NULL)
-  {
-    printf("%s\n", auxBelieves->believes);
-    auxBelieves = auxBelieves->next;
-  }
-  printf("\n\n");
-
-  struct goals *auxGoals = newAgent->goals;
-  while (auxGoals != NULL)
-  {
-    printf("%s\n", auxGoals->goals);
-    auxGoals = auxGoals->next;
-  }
-
-  printf("\n\n");
-
-  struct plans *auxPlans = newAgent->plans;
-  while (auxPlans != NULL)
-  {
-
-    printf("%s", auxPlans->planContent->triggerEvent);
-    printf(" %s", auxPlans->planContent->context);
-
-    struct body *aux = auxPlans->planContent->body;
-
-    while (aux != NULL)
-    {
-      printf(" %s\n", aux->body);
-      aux = aux->next;
-    }
-
-    auxPlans = auxPlans->next;
-  }
-
-  printf("\n");
-
   newAgent->next = agents;
 
-  return newAgent;
+  agents = newAgent;
+
+  return agents;
 }
 
 void yyerror(char *s, ...)
