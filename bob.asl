@@ -1,10 +1,16 @@
 estaChovendo.
+naotenhoGuardaChuva.
 
 
 !comprarGuardaChuva.
+!naoPegarChuva.
 
 
-+!comprarGuardaChuva: not estaChovendo <-  .printf("sair");
++!comprarGuardaChuva: estaChovendo & naotenhoGuardaChuva <-  .printf("sair");
   .printf("procurarLoja");
-  .printf("comprarGuardaChuva");
+  .printf("comprarGuardaChuva").
++!naoPegarChuva: not estaChovendo <-  .printf("sair");
+  .printf("jogarBola").
++!naoPegarChuva: estaChovendo & naotenhoGuardaChuva <-  .printf("ficarEmCasa");
+  .printf("estudar").
 

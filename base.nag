@@ -6,3 +6,23 @@ plano2 ( naoPegarChuva ; NAO estaChovendo ; { sair; jogarBola ; } ) ;
 plano3 ( naoPegarChuva ; estaChovendo E naotenhoGuardaChuva ;
 { ficarEmCasa ; estudar ; } ) ; }
 %
+#diego 
+crencas: { estaSoleado ; tenhoOculosDeSol ; tenhoProtetorSolar ; }
+objetivos: { aproveitarDia ; protegerPeleDosRaios ; }
+planos: { 
+  plano1 ( aproveitarDia ; estaSoleado E tenhoOculosDeSol ;
+    { sair; praticarEsportesAoArLivre; aplicarProtetorSolar; } ) ;
+  plano2 ( protegerPeleDosRaios ; estaSoleado E tenhoOculosDeSol ;
+    { ficarNaSombra; usarChapeu; aplicarProtetorSolar; } ) ;
+}
+%
+#eduardo 
+crencas: { estaEnsolarado ; tenhoRedeDeVolei ; tenhoBola ; tenhoProtetorSolar ; }
+objetivos: { jogarVolei ; aproveitarDia ; }
+planos: { 
+  plano1 ( jogarVolei ; tenhoRedeDeVolei E tenhoBola ;
+    { sair; montarRede; pegarBola; jogarVolei; } ) ;
+  plano2 ( aproveitarDia ; estaEnsolarado E tenhoProtetorSolar ;
+    { sair; aplicarProtetorSolar; fazerAtividadesAoArLivre; } ) ;
+}
+%

@@ -1,24 +1,27 @@
-<agents> ::=  ε
-	 | <agent> '%' <agents>
+<program> ::= agents
 
-<agent> ::= '#' NAME BELIEFS <beliefs> GOALS <goals> PLANS <plans>
+<agents> ::=  ε
+	 		| <agent> '%' <agents>
+
+<agent> ::= '#' NAME BELIEFS ':' <beliefs> GOALS ':' <goals> PLANS ':' '{' <plans> '}'
 
 <beliefs> ::= '{' <beliefsName> '}'
 
 <beliefsName> ::=  ε
-	      | NAME ';' <beliefsName>
+	    | NAME ';' <beliefsName>
 
 <goals> ::= '{' <goalsName> '}' 
 
 <goalsName> ::=  ε
 	    | NAME ';' <goalsName> 
 
-<plans> ::= '{' <plansName> '}' 
+<plans> ::= ε
+			| <plan> ';' <plans>
 
-<plansName> ::=  ε
-	    | NAME ';' <plansName> 
+<plan> ::=  ε
+	    | NAME <plansTuple>
 
-<plansTuple> ::= '(' <tiggerEvent> ';' <context> ';' <body> ')'
+<plansTuple> ::= '(' <triggerEvent> ';' <context> ';' <body> ')' 
 
 <tiggerEvent> ::= NAME
 
@@ -30,5 +33,7 @@
 	 | NAME OR NAME
 	 | NOT NAME
 
-<body> ::= '{' <bodysFormula ';' '}'
+<body> ::= '{' <bodysFormula> '}'
 
+<bodysFormula> ::=  ε
+	  | NAME ';' <bodysFormula>

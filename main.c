@@ -32,7 +32,7 @@ struct goals *prependGoal(struct goals *goals, char *newGoal)
 
   struct goals *new = (struct goals *)malloc(sizeof(struct goals));
 
-  char *formatedGoal = (char *)malloc(sizeof(char) * strlen(newGoal) + 3);
+  char *formatedGoal = (char *)malloc(sizeof(char) * strlen(newGoal) + 4);
   strcat(formatedGoal, "!");
   strcat(formatedGoal, newGoal);
   strcat(formatedGoal, ".");
@@ -48,6 +48,19 @@ struct body *prependBody(struct body *body, char *newBody)
   if (newBody == NULL)
   {
     return body;
+  }
+  if (body == NULL)
+  {
+    struct body *new = (struct body *)malloc(sizeof(struct body));
+
+    new->body = (char *)malloc(sizeof(char) * strlen(newBody) + 100);
+
+    strcat(new->body, " .printf(\"");
+    strcat(new->body, newBody);
+    strcat(new->body, "\").");
+    new->next = body;
+
+    return new;
   }
 
   struct body *aux = body;
