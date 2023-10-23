@@ -3,6 +3,8 @@
 #include <stdarg.h>
 #include <string.h>
 #include "header.h"
+#include <sys/stat.h>
+#include <errno.h>
 
 struct believes *prependBelieve(struct believes *believes, char *newBelieve)
 {
@@ -230,8 +232,16 @@ void printList(struct agents *list)
 
 void printAgentInFile(struct agents *agent)
 {
-  char *agentName = (char *)malloc(sizeof(char) * strlen(agent->name) + 5);
-  strcpy(agentName, agent->name);
+  struct stat st = {0};
+
+  if (stat("output", &st) == -1)
+  {
+    mkdir("output", 0700);
+  }
+
+  char *agentName = (char *)malloc(sizeof(char) * strlen(agent->name) + 16);
+  strcpy(agentName, "output/");
+  strcat(agentName, agent->name);
   strcat(agentName, ".asl");
   FILE *f = fopen(agentName, "w");
   struct believes *auxBelieves = agent->believes;

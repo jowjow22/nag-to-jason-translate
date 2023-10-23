@@ -48,8 +48,6 @@ struct agents
 struct believes *prependBelieve(struct believes *believes, char *newBelieve);
 // goals
 struct goals *prependGoal(struct goals *goals, char *newGoal);
-// planContent
-struct planContent *createPlanContent(char *triggerEvent, char *context, struct body *body);
 
 struct body *prependBody(struct body *body, char *newBody);
 // plans
